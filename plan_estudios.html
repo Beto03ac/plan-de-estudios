@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan de Estudios Interactivo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    .semestre {
+      margin-bottom: 30px;
+    }
+    .titulo-semestre {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .materia {
+      display: inline-block;
+      background-color: #e0e0e0;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .materia.completada {
+      background-color: #0074D9;
+      color: white;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>Plan de Estudios - Ingeniería en Mantenimiento Industrial</h1>
+
+  <div id="plan"></div>
+
+  <script>
+    const materias = {
+      "Semestre 0": ["CI0200 Examen Diagnóstico", "CI0202 Inglés Básico"],
+      "Semestre 1": ["CA2125 Elementos De Computación", "CI1106 Comunicación Escrita", "CI1230 Inglés I", "CS1502 Introducción A La Técnica Científica", "MA0101 Matemática General", "QUI1102 Laboratorio De Química Básica I", "QUI1106 Química Básica I", "SE1200 Actividad Deportiva I"],
+      "Semestre 2": ["CI1107 Comunicación Oral", "FI1101 Física General I", "FI1201 Laboratorio Física General I", "MA1102 Cálculo Diferencial E Integral", "MI2101 Dibujo Técnico", "QUI1104 Laboratorio De Química Básica I...", "QUI1107 Química Básica II", "SE1100 Actividad Cultural I"],
+      "Semestre 3": ["CI1231 Inglés II", "CS2303 Relaciones Laborales", "FI1102 Física General II", "FI1202 Laboratorio Física General II", "MA1103 Cálculo Y Álgebra Lineal", "MI2106 Estática", "MI3103 Procesos De Manufactura", "MI3104 Laboratorio Procesos De Manufac..."],
+      "Semestre 4": ["FH1000 Centros De Formación Humanística", "FI2103 Física General III", "MA2104 Cálculo Superior", "MI2202 Laboratorio De Electricidad I", "MI2205 Electricidad I", "MI2207 Electricidad II", "MI3124 Dibujo Industrial"],
+      "Semestre 5": ["MA2105 Ecuaciones Diferenciales", "ME2308 Tecnología De Materiales", "ME2309 Laboratorio De Tecnología De Ma...", "MI3108 Mecánica De Fluidos", "MI3115 Resistencia De Materiales", "MI3130 Termodinámica", "PI2609 Probabilidad Y Estadística"],
+      "Semestre 6": ["AE5121 Ingeniería Económica", "CM4108 Transferencia De Calor", "MI3111 Laboratorio De Mecánica De Flui...", "MI3119 Laboratorio De Turbomáquinas", "MI3206 Laboratorio De Máquinas Eléctri...", "MI3209 Electricidad III", "MI3431 Modelos Cuantitativos Para La T..."],
+      "Semestre 7": ["AE4208 Desarrollo De Emprendedores", "CM3207 Métodos Numéricos Para Ingenier...", "MI3116 Turbo Máquinas", "MI4209 Control Eléctrico", "MI4210 Laboratorio De Control Eléctric...", "SO2601 Fundamentos De Seguridad E Higi..."],
+      "Semestre 8": ["CS3404 Seminario De Ética Para La Inge...", "MI4101 Electiva I", "MI4106 Elementos De Máquinas", "MI4121 Máquinas Eléctricas", "MI4300 Administración Mantenimiento I", "MI4305 Administración De Mantenimiento"],
+      "Semestre 9": ["CS4402 Seminario De Estudios Costarric...", "MI4125 Laboratorio De Sistemas De Vapo...", "MI4129 Sistemas De Vapor", "MI4212 Instalaciones Eléctricas", "MI5102 Electiva II", "MI5215 Análisis De Sistemas Eléctricos..."],
+      "Semestre 10": ["MI5521 Trabajo Final De Graduación"]
+      ,
+      "Semestre 9": ["MI6351 Mantenimiento Predictivo", "CS4402 Seminario De Estudios Costarric...", "MI4125 Laboratorio De Sistemas De Vapo...", "MI4129 Sistemas De Vapor", "MI4212 Instalaciones Eléctricas", "MI5102 Electiva II", "MI5215 Análisis De Sistemas Eléctricos..."]
+    };
+
+    const plan = document.getElementById('plan');
+
+    const estadoGuardado = JSON.parse(localStorage.getItem('estadoMaterias') || '{}');
+
+    for (const [semestre, lista] of Object.entries(materias)) {
+      const contenedor = document.createElement('div');
+      contenedor.className = 'semestre';
+
+      const titulo = document.createElement('div');
+      titulo.className = 'titulo-semestre';
+      titulo.textContent = semestre;
+      contenedor.appendChild(titulo);
+
+      lista.forEach(nombre => {
+        const div = document.createElement('div');
+        div.className = 'materia';
+        div.textContent = nombre;
+
+        if (estadoGuardado[nombre]) {
+          div.classList.add('completada');
+        }
+
+        div.addEventListener('click', () => {
+          div.classList.toggle('completada');
+          estadoGuardado[nombre] = div.classList.contains('completada');
+          localStorage.setItem('estadoMaterias', JSON.stringify(estadoGuardado));
+        });
+
+        contenedor.appendChild(div);
+      });
+
+      plan.appendChild(contenedor);
+    }
+  </script>
+</body>
+</html>
